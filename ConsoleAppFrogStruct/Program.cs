@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleAppFrog
+namespace ConsoleAppFrogStruct
 {
 
     class Program
@@ -87,17 +87,19 @@ namespace ConsoleAppFrog
             int yAuto2 = 10;
 
             char[,] matice = new char[heigth, width];
+
             char[,] maticeAuto1 = Nacti("auto1.txt");
+
             char[,] maticeAuto2 = Nacti("auto2.txt");
+
             int heightAuto1 = maticeAuto1.GetLength(0);
             int widthAuto1 = maticeAuto1.GetLength(1);
             int widthAuto2 = maticeAuto2.GetLength(1);
 
             char[,] maticeFrogUp = Nacti("frog_up.txt");
             char[,] maticeFrogDown = Nacti("frog_down.txt");
-           
-           
-            char[,] maticeFrog = maticeFrogUp;
+            Frog frog = new Frog(0, 0, maticeFrogUp, maticeFrogDown);
+            frog.lifes = 3;
 
             do
             {
@@ -122,7 +124,7 @@ namespace ConsoleAppFrog
                         case ConsoleKey.UpArrow:
                             maticeFrog = maticeFrogUp;
                             if (y > 0)
-                            { 
+                            {
                                 --y;
                             }
                             break;

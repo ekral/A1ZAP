@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleFrog", "ConsoleFrog\ConsoleFrog.csproj", "{69684D62-9488-4181-BDC6-99C5CEA10BA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppFrogStruct", "ConsoleAppFrogStruct\ConsoleAppFrogStruct.csproj", "{88B58D8B-4491-4D6A-9166-9EEF41DFDA46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{69684D62-9488-4181-BDC6-99C5CEA10BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69684D62-9488-4181-BDC6-99C5CEA10BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69684D62-9488-4181-BDC6-99C5CEA10BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B58D8B-4491-4D6A-9166-9EEF41DFDA46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B58D8B-4491-4D6A-9166-9EEF41DFDA46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B58D8B-4491-4D6A-9166-9EEF41DFDA46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B58D8B-4491-4D6A-9166-9EEF41DFDA46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
