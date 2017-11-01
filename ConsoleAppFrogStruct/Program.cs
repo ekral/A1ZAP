@@ -10,190 +10,124 @@ namespace ConsoleAppFrogStruct
 
     class Program
     {
-        // 1) Dodelejte ukonceni programu pomoci klavesy Q nebo ESC
-        // 2) Pridejte pocitani zivotu zelvy, 
-        //    pokud ji prejede, auto, tak prijde o zivot
-        // 3) Pokud uz nebude mit zivoty, tak vypiste text gameover
-
-        static void Napln(char[,] matice, char znak)
-        {
-            int height = matice.GetLength(0);
-            int width = matice.GetLength(1);
-
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    matice[i, j] = znak;
-                }
-            }
-        }
-
-        static char[,] Nacti(string fileName)
+        static Matrix MatrixFromFile(string fileName)
         {
             string[] radky = File.ReadAllLines(fileName);
             int height = radky.Length;
             int width = radky[0].Length;
-
-            char[,] matice = new char[height, width];
+   
+            Matrix matice = new Matrix(height, width);
 
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    matice[i, j] = radky[i][j];
+                    matice.data[i, j] = radky[i][j];
                 }
             }
 
             return matice;
         }
 
-        static void Vykresli(char[,] matice, char[,] maticeAuto, int xoffset, int yoffset)
-        {
-            int height = matice.GetLength(0);
-            int width = matice.GetLength(1);
-
-            int heightAuto = maticeAuto.GetLength(0);
-            int widthAuto = maticeAuto.GetLength(1);
-
-            for (int i = 0; i < heightAuto; i++)
-            {
-                for (int j = 0; j < widthAuto; j++)
-                {
-                    int xpos = xoffset + j;
-                    int ypos = yoffset + i;
-                    if ((xpos >= 0) && (xpos < width) && (ypos >= 0) && (ypos < height))
-                    {
-                        matice[ypos, xpos] = maticeAuto[i, j];
-                    }
-                }
-            }
-        }
-
         static void Main(string[] args)
         {
             Console.CursorVisible = false;
 
-            bool konec = false;
-            int zivoty = 3;
+            bool gameOver = false;
+            int lifes = 3;
             const int width = 40;
             const int heigth = 20;
-            int x = width / 2;
-            int y = heigth / 2;
 
-            int xAuto1 = 0;
-            int yAuto1 = 2;
-            int xAuto2 = width;
-            int yAuto2 = 10;
+            Position frogPos = new Position(width / 2, heigth / 2);
+            Position car1Pos = new Position(0, 2);
+            Position car2Pos = new Position(width - 1, 10);
 
-            char[,] matice = new char[heigth, width];
-
-            char[,] maticeAuto1 = Nacti("auto1.txt");
-
-            char[,] maticeAuto2 = Nacti("auto2.txt");
-
-            int heightAuto1 = maticeAuto1.GetLength(0);
-            int widthAuto1 = maticeAuto1.GetLength(1);
-            int widthAuto2 = maticeAuto2.GetLength(1);
-
-            char[,] maticeFrogUp = Nacti("frog_up.txt");
-            char[,] maticeFrogDown = Nacti("frog_down.txt");
-            Frog frog = new Frog(0, 0, maticeFrogUp, maticeFrogDown);
-            frog.lifes = 3;
-
+            Matrix bufferMatrix = new Matrix(heigth, width);
+            Matrix car1Matrix = MatrixFromFile("auto1.txt");
+            Matrix car2Matrix = MatrixFromFile("auto2.txt");
+            Matrix matrixFrogUp = MatrixFromFile("frog_up.txt");
+            Matrix matrixFrogDown = MatrixFromFile("frog_down.txt");
+            Matrix matrixFrog = matrixFrogUp;
+ 
             do
             {
                 if (Console.KeyAvailable)
                 {
-                    ConsoleKey klavesa = Console.ReadKey(true).Key;
+                    ConsoleKey key = Console.ReadKey(true).Key;
 
-                    switch (klavesa)
+                    switch (key)
                     {
                         case ConsoleKey.LeftArrow:
-                            if (x > 0)
+                            if (frogPos.x > 0)
                             {
-                                --x;
+                                --frogPos.x;
                             }
                             break;
                         case ConsoleKey.RightArrow:
-                            if (x < (width - 1))
+                            if (frogPos.x < (width - 1))
                             {
-                                ++x;
+                                ++frogPos.x;
                             }
                             break;
                         case ConsoleKey.UpArrow:
-                            maticeFrog = maticeFrogUp;
-                            if (y > 0)
+                            matrixFrog = matrixFrogUp;
+                            if (frogPos.y > 0)
                             {
-                                --y;
+                                --frogPos.y;
                             }
                             break;
                         case ConsoleKey.DownArrow:
-                            maticeFrog = maticeFrogDown;
-                            if (y < (heigth - 1))
+                            matrixFrog = matrixFrogDown;
+                            if (frogPos.y < (heigth - 1))
                             {
-                                ++y;
+                                ++frogPos.y;
                             }
                             break;
                         case ConsoleKey.Q:
-                            konec = true;
+                            gameOver = true;
                             break;
                         case ConsoleKey.Escape:
-                            konec = true;
+                            gameOver = true;
                             break;
                     }
 
                 }
 
-                Napln(matice, ' ');
-
-                Vykresli(matice, maticeFrog, x, y);
-                Vykresli(matice, maticeAuto1, xAuto1, yAuto1);
-                Vykresli(matice, maticeAuto2, xAuto2, yAuto2);
-
+                bufferMatrix.Fill(' ');
+                bufferMatrix.Write(matrixFrog, frogPos);
+                bufferMatrix.Write(car1Matrix, car1Pos);
+                bufferMatrix.Write(car2Matrix, car2Pos);
 
                 Console.SetCursorPosition(0, 0);
 
-                Console.WriteLine($"Zivoty: {zivoty}    ");
+                Console.WriteLine($"Lifes: {lifes}    ");
 
                 for (int i = 0; i < heigth; i++)
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        Console.Write(matice[i, j]);
+                        Console.Write(bufferMatrix.data[i, j]);
                     }
                     Console.WriteLine();
                 }
 
-                if ((y == yAuto1) && (x == xAuto1))
+                // TODO: life counting
+                
+                ++car1Pos.x;
+                if (car1Pos.x >= bufferMatrix.width)
                 {
-                    if (zivoty > 1)
-                    {
-                        --zivoty;
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Game over");
-                        konec = true;
-                    }
+                    car1Pos.x = -car1Matrix.width;
                 }
 
-                ++xAuto1;
-                if (xAuto1 >= width)
+                --car2Pos.x;
+                if (car2Pos.x < -car2Matrix.width)
                 {
-                    xAuto1 = -widthAuto1;
-                }
-
-                --xAuto2;
-                if (xAuto2 < -widthAuto2)
-                {
-                    xAuto2 = width;
+                    car2Pos.x = bufferMatrix.width;
                 }
 
                 System.Threading.Thread.Sleep(20);
 
-            } while (!konec);
+            } while (!gameOver);
 
             Console.Read();
         }
