@@ -44,7 +44,7 @@ namespace ConsoleAppFrogStruct
 
                     if ((x >= 0) && (x < width) && (y >= 0) && (y < height))
                     {
-                        data[y, x] = data[i, j];
+                        data[y, x] = other.data[i, j];
                     }
                 }
             }
